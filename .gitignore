@@ -1,0 +1,11 @@
+.DS_Store
+/.build
+/build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/
+*.xcodeproj
+Support/AppIcon.icns
+Support/AppIcon.iconset
+.claude/settings.local.json
