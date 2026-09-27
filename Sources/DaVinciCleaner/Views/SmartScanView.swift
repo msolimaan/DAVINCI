@@ -202,7 +202,6 @@ private struct SmartCard<Footer: View>: View {
                 Text(caption)
                     .font(.callout)
                     .foregroundStyle(Theme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
                 footer()
                 Spacer(minLength: 0)
                 Button(actionTitle, action: action)

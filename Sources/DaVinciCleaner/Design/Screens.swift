@@ -30,7 +30,6 @@ struct IntroScreen<Accessory: View>: View {
                     Text(module.tagline)
                         .font(.title3)
                         .foregroundStyle(Theme.secondaryText)
-                        .fixedSize(horizontal: false, vertical: true)
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(features) { feature in
                             FeatureRow(feature: feature)
@@ -38,7 +37,7 @@ struct IntroScreen<Accessory: View>: View {
                     }
                     .padding(.top, 10)
                 }
-                .frame(maxWidth: 440, alignment: .leading)
+                .frame(width: 420, alignment: .leading)
             }
             .padding(.horizontal, 40)
             Spacer(minLength: 24)
@@ -73,7 +72,6 @@ struct FeatureRow: View {
                 Text(feature.detail)
                     .font(.callout)
                     .foregroundStyle(Theme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }

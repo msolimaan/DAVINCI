@@ -86,11 +86,9 @@ private struct MaintenanceCard: View {
                         Text(task.summary)
                             .font(.callout)
                             .foregroundStyle(Theme.secondaryText)
-                            .fixedSize(horizontal: false, vertical: true)
                         Text("Use when: \(task.whenToUse)")
                             .font(.caption)
                             .foregroundStyle(Theme.tertiaryText)
-                            .fixedSize(horizontal: false, vertical: true)
                         statusView
                     }
                     Spacer(minLength: 0)

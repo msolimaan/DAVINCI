@@ -223,7 +223,6 @@ private struct StatCard: View {
                     Text(caption)
                         .font(.caption)
                         .foregroundStyle(Theme.tertiaryText)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }

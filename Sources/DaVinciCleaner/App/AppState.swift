@@ -4,7 +4,8 @@ import SwiftUI
 /// Owns every module's view model so work and results survive switching between modules.
 @MainActor
 final class AppState: ObservableObject {
-    @Published var selection: Module = .smartScan
+    @Published var selection: Module =
+        Module(rawValue: ProcessInfo.processInfo.environment["DAVINCI_MODULE"] ?? "") ?? .smartScan
     @Published private(set) var hasFullDiskAccess = FullDiskAccess.isGranted
     @Published var fullDiskAccessBannerDismissed = false
 
