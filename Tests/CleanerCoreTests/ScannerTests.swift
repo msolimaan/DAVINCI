@@ -1,4 +1,7 @@
 @testable import CleanerCore
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 import XCTest
 
 final class JunkScannerTests: XCTestCase {
