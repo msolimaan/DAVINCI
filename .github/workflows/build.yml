@@ -42,20 +42,23 @@ jobs:
 
       - name: Publish download on the Releases page
         if: github.event_name != 'pull_request'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: latest-build
-          name: DaVinci Cleaner (latest build)
-          prerelease: true
-          target_commitish: ${{ github.sha }}
-          body: |
-            Automatic build of `${{ github.ref_name }}` at ${{ github.sha }}.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Releases in this repo are immutable, so every build gets its own tag.
+          # `gh release create` uploads the files to a draft first, then publishes it.
+          TAG="build-${{ github.run_number }}"
+          cat > notes.md <<'NOTES'
+          **Install:** open `DaVinci-Cleaner.dmg` and drag **DaVinci Cleaner** into **Applications**.
 
-            **Install:** open `DaVinci-Cleaner.dmg` and drag **DaVinci Cleaner** into **Applications**.
+          **First launch:** the app isn't notarized by Apple, so macOS blocks it the first time.
+          Open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**,
+          or run `xattr -dr com.apple.quarantine "/Applications/DaVinci Cleaner.app"` in Terminal.
 
-            **First launch:** the app isn't notarized by Apple, so macOS will block it the first time.
-            Open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**
-            (or run `xattr -dr com.apple.quarantine "/Applications/DaVinci Cleaner.app"` in Terminal).
-          files: |
-            build/DaVinci-Cleaner.dmg
-            build/DaVinci-Cleaner.zip
+          Then grant **Full Disk Access** in **System Settings → Privacy & Security → Full Disk Access**.
+          NOTES
+          gh release create "$TAG" build/DaVinci-Cleaner.dmg build/DaVinci-Cleaner.zip \
+            --target "${{ github.sha }}" \
+            --title "DaVinci Cleaner (build ${{ github.run_number }})" \
+            --notes-file notes.md \
+            --latest
