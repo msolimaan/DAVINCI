@@ -6,14 +6,42 @@ struct RootView: View {
     @EnvironmentObject private var state: AppState
 
     var body: some View {
+        switch DebugLog.variant {
+        case "plain":
+            Text("PLAIN VARIANT").font(.system(size: 60, weight: .bold)).foregroundColor(.red)
+                .frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.yellow)
+        case "split":
+            NavigationSplitView {
+                Text("SIDEBAR").font(.largeTitle)
+            } detail: {
+                Text("DETAIL").font(.system(size: 60, weight: .bold)).foregroundColor(.red)
+            }
+        case "splitlist":
+            NavigationSplitView {
+                SidebarView()
+            } detail: {
+                Text("DETAIL").font(.system(size: 60, weight: .bold)).foregroundColor(.red)
+            }
+        case "nobg":
+            main(background: false)
+        default:
+            main(background: true)
+        }
+    }
+
+    private func main(background: Bool) -> some View {
         NavigationSplitView {
             SidebarView()
                 .navigationSplitViewColumnWidth(min: 220, ideal: 240, max: 280)
         } detail: {
             ZStack(alignment: .top) {
-                ModuleBackground(palette: state.selection.palette)
-                    .id(state.selection)
-                    .transition(.opacity)
+                if background {
+                    ModuleBackground(palette: state.selection.palette)
+                        .id(state.selection)
+                        .transition(.opacity)
+                } else {
+                    Color.purple
+                }
                 ModuleView(module: state.selection)
                     .id(state.selection)
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))

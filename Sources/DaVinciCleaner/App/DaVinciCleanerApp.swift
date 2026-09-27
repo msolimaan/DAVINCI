@@ -42,7 +42,7 @@ struct DaVinciCleanerApp: App {
                 .preferredColorScheme(.dark)
         }
 
-        MenuBarExtra(isInserted: $showMenuBarMonitor) {
+        MenuBarExtra(isInserted: DebugLog.variant == "nomenu" ? .constant(false) : $showMenuBarMonitor) {
             MenuBarView()
                 .environmentObject(state)
                 .environmentObject(state.monitor)

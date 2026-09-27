@@ -111,6 +111,8 @@ extension Date {
 /// Prints lifecycle events when DAVINCI_DEBUG is set; used by the launch diagnostics workflow.
 enum DebugLog {
     static let isEnabled = ProcessInfo.processInfo.environment["DAVINCI_DEBUG"] != nil
+    /// Swaps parts of the UI for plain placeholders to bisect rendering problems.
+    static let variant = ProcessInfo.processInfo.environment["DAVINCI_VARIANT"] ?? ""
 
     static func write(_ message: String) {
         guard isEnabled else { return }
