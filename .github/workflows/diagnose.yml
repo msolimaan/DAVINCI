@@ -28,6 +28,18 @@ jobs:
           log show --last 2m --style compact --predicate "process == 'DaVinciCleaner'" > diag/system.log 2>&1 || true
           kill $PID || true
 
+      - name: Print diagnostics
+        if: always()
+        run: |
+          echo "===== ps"; cat diag/ps.txt || true
+          echo "===== stdout"; cat diag/stdout.log || true
+          echo "===== system log"; grep -iE "error|fault|crash|assert|hang" diag/system.log | head -80 || true
+          echo "===== sample (main thread)"; sed -n '/Call graph:/,/Total number in stack/p' diag/sample.txt | head -150 || true
+          for shot in screen-12s screen-20s; do
+            sips -s format jpeg -s formatOptions 45 -Z 900 diag/$shot.png --out diag/$shot.jpg >/dev/null 2>&1 || true
+            echo "===== BEGIN $shot"; base64 -i diag/$shot.jpg | tr -d '\n'; echo; echo "===== END $shot"
+          done
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
