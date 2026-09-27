@@ -18,7 +18,7 @@ jobs:
         run: |
           mkdir -p diag
           BIN="build/DaVinci Cleaner.app/Contents/MacOS/DaVinciCleaner"
-          for v in default plain split splitlist nobg nomenu; do
+          for v in nostart nobanner nomodule nohero nobutton nohero,nobutton,nobg; do
             DAVINCI_DEBUG=1 DAVINCI_VARIANT=$v "$BIN" > diag/stdout-$v.log 2>&1 &
             PID=$!
             sleep 9
@@ -35,7 +35,7 @@ jobs:
           for f in diag/stdout-*.log; do echo "--- $f"; cat "$f"; done
           echo "===== system log"; grep -iE "fault|crash|assert|swiftui|AttributeGraph|cycle" diag/system.log | grep -v GetAPFSVolumeRole | head -60 || true
           echo "===== sample (main thread)"; sed -n '/Call graph:/,/Total number in stack/p' diag/sample.txt | head -150 || true
-          for shot in screen-default screen-plain screen-split screen-splitlist screen-nobg screen-nomenu; do
+          for shot in diag/screen-*.png; do shot=$(basename $shot .png)
             sips -s format jpeg -s formatOptions 45 -Z 600 diag/$shot.png --out diag/$shot.jpg >/dev/null 2>&1 || true
             echo "===== BEGIN $shot"; base64 -i diag/$shot.jpg | tr -d '\n'; echo; echo "===== END $shot"
           done

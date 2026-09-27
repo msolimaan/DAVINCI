@@ -113,6 +113,7 @@ enum DebugLog {
     static let isEnabled = ProcessInfo.processInfo.environment["DAVINCI_DEBUG"] != nil
     /// Swaps parts of the UI for plain placeholders to bisect rendering problems.
     static let variant = ProcessInfo.processInfo.environment["DAVINCI_VARIANT"] ?? ""
+    static func off(_ flag: String) -> Bool { variant.split(separator: ",").contains(Substring(flag)) }
 
     static func write(_ message: String) {
         guard isEnabled else { return }

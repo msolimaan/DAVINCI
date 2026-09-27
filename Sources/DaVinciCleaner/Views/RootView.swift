@@ -22,10 +22,8 @@ struct RootView: View {
             } detail: {
                 Text("DETAIL").font(.system(size: 60, weight: .bold)).foregroundColor(.red)
             }
-        case "nobg":
-            main(background: false)
         default:
-            main(background: true)
+            main(background: !DebugLog.off("nobg"))
         }
     }
 
@@ -42,10 +40,14 @@ struct RootView: View {
                 } else {
                     Color.purple
                 }
-                ModuleView(module: state.selection)
-                    .id(state.selection)
-                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
-                if !state.hasFullDiskAccess && !state.fullDiskAccessBannerDismissed {
+                if DebugLog.off("nomodule") {
+                    Text("MODULE OFF").font(.largeTitle)
+                } else {
+                    ModuleView(module: state.selection)
+                        .id(state.selection)
+                        .transition(.opacity.combined(with: .scale(scale: 0.98)))
+                }
+                if !state.hasFullDiskAccess && !state.fullDiskAccessBannerDismissed && !DebugLog.off("nobanner") {
                     FullDiskAccessBanner(
                         onOpenSettings: FullDiskAccess.openSettings,
                         onRecheck: state.recheckFullDiskAccess
@@ -58,7 +60,7 @@ struct RootView: View {
         }
         .onAppear {
             DebugLog.write("RootView appeared")
-            state.start()
+            if !DebugLog.off("nostart") { state.start() }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             state.recheckFullDiskAccess()

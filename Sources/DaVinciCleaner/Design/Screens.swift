@@ -21,7 +21,9 @@ struct IntroScreen<Accessory: View>: View {
         VStack(spacing: 0) {
             Spacer(minLength: 24)
             HStack(alignment: .center, spacing: 56) {
-                HeroIcon(symbol: module.symbol, palette: module.palette)
+                if !DebugLog.off("nohero") {
+                    HeroIcon(symbol: module.symbol, palette: module.palette)
+                }
                 VStack(alignment: .leading, spacing: 14) {
                     Text(module.title)
                         .font(.heroTitle)
@@ -40,7 +42,9 @@ struct IntroScreen<Accessory: View>: View {
             }
             .padding(.horizontal, 40)
             Spacer(minLength: 24)
-            ScanButton(title: buttonTitle, palette: module.palette, action: action)
+            if !DebugLog.off("nobutton") {
+                ScanButton(title: buttonTitle, palette: module.palette, action: action)
+            }
             accessory()
                 .padding(.top, 18)
             Spacer(minLength: 32)
