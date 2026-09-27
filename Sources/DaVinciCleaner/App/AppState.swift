@@ -22,11 +22,19 @@ final class AppState: ObservableObject {
         let junk = JunkViewModel()
         self.junk = junk
         smartScan = SmartScanViewModel(junk: junk)
+    }
+
+    /// Called once the window is on screen. Starting work from `init` would publish changes
+    /// while SwiftUI is still building the scene, which it treats as undefined behaviour.
+    func start() {
+        DebugLog.write("AppState.start")
         monitor.start()
+        recheckFullDiskAccess()
     }
 
     func recheckFullDiskAccess() {
-        hasFullDiskAccess = FullDiskAccess.isGranted
+        let granted = FullDiskAccess.isGranted
+        if granted != hasFullDiskAccess { hasFullDiskAccess = granted }
     }
 
     func show(_ module: Module) {

@@ -107,3 +107,13 @@ extension Date {
         return formatter.localizedString(for: self, relativeTo: Date())
     }
 }
+
+/// Prints lifecycle events when DAVINCI_DEBUG is set; used by the launch diagnostics workflow.
+enum DebugLog {
+    static let isEnabled = ProcessInfo.processInfo.environment["DAVINCI_DEBUG"] != nil
+
+    static func write(_ message: String) {
+        guard isEnabled else { return }
+        FileHandle.standardError.write(Data("[DaVinci] \(message)\n".utf8))
+    }
+}

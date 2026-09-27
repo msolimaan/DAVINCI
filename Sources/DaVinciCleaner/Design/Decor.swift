@@ -33,6 +33,7 @@ struct ModuleBackground: View {
         .ignoresSafeArea()
         .allowsHitTesting(false)
         .onAppear {
+            DebugLog.write("ModuleBackground appeared")
             withAnimation(.easeInOut(duration: 10).repeatForever(autoreverses: true)) {
                 drift = true
             }

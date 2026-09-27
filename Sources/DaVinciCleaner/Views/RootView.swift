@@ -28,6 +28,10 @@ struct RootView: View {
             .foregroundStyle(.white)
             .animation(.easeInOut(duration: 0.35), value: state.selection)
         }
+        .onAppear {
+            DebugLog.write("RootView appeared")
+            state.start()
+        }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             state.recheckFullDiskAccess()
         }
@@ -39,6 +43,11 @@ struct ModuleView: View {
     let module: Module
 
     var body: some View {
+        content.onAppear { DebugLog.write("ModuleView appeared: \(module.rawValue)") }
+    }
+
+    @ViewBuilder
+    private var content: some View {
         switch module {
         case .smartScan: SmartScanView()
         case .systemJunk: SystemJunkView()
@@ -70,6 +79,7 @@ struct SidebarView: View {
             }
         }
         .listStyle(.sidebar)
+        .onAppear { DebugLog.write("Sidebar appeared") }
         .safeAreaInset(edge: .top) {
             HStack(spacing: 10) {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
